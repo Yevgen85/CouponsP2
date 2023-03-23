@@ -1,0 +1,140 @@
+package com.example.couponsp2.services;
+
+import com.example.couponsp2.beans.Category;
+import com.example.couponsp2.beans.Coupon;
+import com.example.couponsp2.custom_exceptions.CompanyException;
+import com.example.couponsp2.custom_exceptions.CouponException;
+import com.example.couponsp2.custom_exceptions.ErrorMsg;
+import com.example.couponsp2.repository.CouponRepository;
+import com.example.couponsp2.validators.CouponValidator;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class CouponService {
+
+    private final CouponRepository couponRepository;
+    private final CouponValidator couponValidator;
+
+    /**
+     *This method adds a coupon to the database
+     * checks if there aren't matches of title with the database
+     * if there was a match, no coupon added
+     */
+    public void add(Coupon coupon) throws CouponException, CompanyException {
+        couponValidator.addValidator(coupon);
+        couponRepository.save(coupon);
+    }
+
+    /**
+     *This method updates coupon
+     *Update can be done if company id and coupon id has a match with the database
+     */
+    public void update(Coupon coupon) throws CouponException {
+        couponValidator.updateValidator(coupon);
+        couponRepository.save(coupon);
+    }
+
+    /**
+     *This method is checking if the coupon is exists in the database
+     * sending coupon ID
+     * return true or false
+     */
+    public boolean isExist(int id) {
+        return couponRepository.existsById(id);
+    }
+
+    /**
+     *This method is checking if the coupon is exists in the database
+     * sending coupon ID and company ID
+     * return true or false
+     */
+    public boolean isExist(int id, int companyId) {
+        return couponRepository.existsByIdAndCompanyId(id, companyId);
+    }
+
+    /**
+     *This method is checking if the coupon is exists in the database
+     * sending title and company ID
+     * return true or false
+     */
+    public boolean isExist(String title, int companyId) {
+        return this.couponRepository.existsCouponByTitleAndCompanyId(title, companyId);
+    }
+
+    /**
+     *This method is deletes coupon from a database
+     *checks if coupon exists and then deletes
+     *if not exists, message of not exist is printed
+     */
+    public void delete(int couponId) throws CouponException {
+        couponValidator.isExistValidator(couponId);
+        couponRepository.deleteById(couponId);
+    }
+    /**
+     *This method returns a list of all coupons in the database
+     */
+    public List<Coupon> getAll() {
+        return couponRepository.findAll();
+    }
+
+    /**
+     *This method returns a list of a company coupons by company id
+     */
+    public List<Coupon> getByCompanyId(int companyId) {
+        return couponRepository.findAllByCompanyId(companyId);
+    }
+
+    /**
+     *This method returns a list of a company coupons
+     *Filtered by category
+     */
+    public List<Coupon> getByCategory(int companyId, Category category) {
+        return couponRepository.findByCompanyIdAndCategory(companyId, category);
+    }
+
+    /**
+     *This method returns a list of a company coupons
+     *Filtered by maximum price
+     */
+    public List<Coupon> getByMaxPrice(int companyId, double maxPrice) {
+        return couponRepository.findByCompanyIdAndPriceIsLessThanEqual(companyId, maxPrice);
+    }
+
+    /**
+     *This method returns a company by searching in the database by id
+     * And returns it with list of coupons that are belongs to this company
+     */
+    public Coupon getById(int couponId) throws CouponException {
+        couponValidator.isExistValidator(couponId);
+        return couponRepository.findById(couponId).orElse(null);
+    }
+
+    /**
+     *This method returns all the expired coupons
+     */
+
+    public List<Coupon> getExpiredCoupons() throws InterruptedException {
+        System.out.println("scheduled");
+        return couponRepository.findAllByEndDateBefore(LocalDate.now());
+    }
+
+    /**
+     *This method deletes all the expired coupons
+     */
+//    @Scheduled(cron = "0 0 0 * * *") ==> @Scheduled(cron = "@midnight")
+    @Scheduled(cron = "@midnight")
+    public void cleanExpiredDateCoupons() throws InterruptedException {
+        System.out.println("Cleaning Expired Coupons...");
+        couponRepository.deleteAll(getExpiredCoupons());
+    }
+
+}
