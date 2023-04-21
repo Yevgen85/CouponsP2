@@ -29,7 +29,10 @@ public enum ErrorMsg {
     NO_COMPANIES("No Companies"),
     COUPON_WITH_THIS_TITLE_ALREADY_EXISTS("Coupon with this title already exists"),
     NO_SUCH_COUPON_TO_UPDATE("No Such Coupon To Update"),
-    NO_SUCH_COUPON_TO_DELETE("No Such Coupon To Delete");
+    NO_SUCH_COUPON_TO_DELETE("No Such Coupon To Delete"),
+    LOGGED_ID_ERROR("Logged Id Is Not As In The Path"),
+    NOT_AUTHORIZED("Not Authorized for This Kind Of Activity!"),
+    ID_ERROR("Id Error! Id vs Email Mismatch");
 
     private final String error;
 

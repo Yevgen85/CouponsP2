@@ -1,15 +1,20 @@
 package com.example.couponsp2.services;
 
 import com.example.couponsp2.beans.Category;
+import com.example.couponsp2.beans.Company;
 import com.example.couponsp2.beans.Coupon;
+import com.example.couponsp2.custom_exceptions.AuthorizationException;
 import com.example.couponsp2.custom_exceptions.CompanyException;
 import com.example.couponsp2.custom_exceptions.CouponException;
 import com.example.couponsp2.custom_exceptions.ErrorMsg;
 import com.example.couponsp2.repository.CouponRepository;
+import com.example.couponsp2.validators.AuthorizationValidator;
 import com.example.couponsp2.validators.CouponValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -23,24 +28,30 @@ public class CouponService {
 
     private final CouponRepository couponRepository;
     private final CouponValidator couponValidator;
+    private final CompanyService companyService;
+    private final AuthorizationValidator authorizationValidator;
+//    Company company = (Company) SecurityContextHolder.getContext().getAuthentication().getDetails();
 
+//    private final UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getDetails();
     /**
      *This method adds a coupon to the database
      * checks if there aren't matches of title with the database
      * if there was a match, no coupon added
      */
-    public void add(Coupon coupon) throws CouponException, CompanyException {
+    public Coupon add(Coupon coupon) throws CouponException, AuthorizationException {
+        authorizationValidator.validateCompany();
         couponValidator.addValidator(coupon);
-        couponRepository.save(coupon);
+        return couponRepository.save(coupon);
     }
 
     /**
      *This method updates coupon
      *Update can be done if company id and coupon id has a match with the database
      */
-    public void update(Coupon coupon) throws CouponException {
+    public Coupon update(Coupon coupon) throws CouponException, AuthorizationException {
+        authorizationValidator.validateCompanyOrCustomer();
         couponValidator.updateValidator(coupon);
-        couponRepository.save(coupon);
+        return couponRepository.save(coupon);
     }
 
     /**
@@ -75,21 +86,25 @@ public class CouponService {
      *checks if coupon exists and then deletes
      *if not exists, message of not exist is printed
      */
-    public void delete(int couponId) throws CouponException {
+    public void delete(int couponId) throws CouponException, AuthorizationException {
+        authorizationValidator.validateCompany();
         couponValidator.isExistValidator(couponId);
         couponRepository.deleteById(couponId);
     }
     /**
      *This method returns a list of all coupons in the database
      */
-    public List<Coupon> getAll() {
+    public List<Coupon> getAll() throws AuthorizationException {
+        authorizationValidator.validateCustomer();
         return couponRepository.findAll();
     }
+
 
     /**
      *This method returns a list of a company coupons by company id
      */
-    public List<Coupon> getByCompanyId(int companyId) {
+    public List<Coupon> getByCompanyId(int companyId) throws AuthorizationException {
+        authorizationValidator.validateCompany();
         return couponRepository.findAllByCompanyId(companyId);
     }
 
@@ -97,15 +112,22 @@ public class CouponService {
      *This method returns a list of a company coupons
      *Filtered by category
      */
-    public List<Coupon> getByCategory(int companyId, Category category) {
+    public List<Coupon> getByCategory(int companyId, Category category) throws AuthorizationException {
+        authorizationValidator.validateCompany();
         return couponRepository.findByCompanyIdAndCategory(companyId, category);
+    }
+
+    public List<Coupon> getByCategory(Category category) throws AuthorizationException {
+        authorizationValidator.validateCustomer();
+        return couponRepository.findByCategory(category);
     }
 
     /**
      *This method returns a list of a company coupons
      *Filtered by maximum price
      */
-    public List<Coupon> getByMaxPrice(int companyId, double maxPrice) {
+    public List<Coupon> getByMaxPrice(int companyId, double maxPrice) throws AuthorizationException {
+        authorizationValidator.validateCompany();
         return couponRepository.findByCompanyIdAndPriceIsLessThanEqual(companyId, maxPrice);
     }
 
@@ -113,9 +135,10 @@ public class CouponService {
      *This method returns a company by searching in the database by id
      * And returns it with list of coupons that are belongs to this company
      */
-    public Coupon getById(int couponId) throws CouponException {
+    public Coupon getById(int couponId) throws CouponException, AuthorizationException {
+        authorizationValidator.validateCompanyOrCustomer();
         couponValidator.isExistValidator(couponId);
-        return couponRepository.findById(couponId).orElse(null);
+        return couponRepository.findCouponById(couponId);
     }
 
     /**

@@ -6,7 +6,7 @@ import com.example.couponsp2.beans.Coupon;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import javax.transaction.Transactional;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -23,9 +23,13 @@ public interface CouponRepository extends JpaRepository<Coupon, Integer> {
     List<Coupon> findAllByCompanyId(int companyId);
     List<Coupon> findAllByCompanyIdAndId(int companyId, int id);
     List<Coupon> findByCompanyIdAndCategory(int companyId, Category category);
+    List<Coupon> findByCategory(Category category);
     List<Coupon> findByCompanyIdAndPriceIsLessThanEqual(int companyId, double price);
     List<Coupon> findAllById(int id);
 
+    Coupon findCouponById(int id);
     List<Coupon> findAllByEndDateBefore(LocalDate localDate);
+
+
 
 }

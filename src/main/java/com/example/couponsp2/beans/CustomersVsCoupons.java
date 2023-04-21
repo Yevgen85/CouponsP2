@@ -1,9 +1,10 @@
 package com.example.couponsp2.beans;
 
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Cascade;
 
-import javax.persistence.*;
+
 
 @ToString
 @NoArgsConstructor

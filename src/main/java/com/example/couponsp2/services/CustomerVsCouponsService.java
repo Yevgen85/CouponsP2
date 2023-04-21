@@ -5,8 +5,10 @@ import com.example.couponsp2.beans.Coupon;
 import com.example.couponsp2.beans.Customer;
 
 import com.example.couponsp2.beans.CustomersVsCoupons;
+import com.example.couponsp2.custom_exceptions.AuthorizationException;
 import com.example.couponsp2.custom_exceptions.CouponException;
 import com.example.couponsp2.repository.CustomersVsCouponsRepository;
+import com.example.couponsp2.validators.AuthorizationValidator;
 import com.example.couponsp2.validators.CouponPurchaseValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,8 +23,8 @@ public class CustomerVsCouponsService {
 
     private final CustomersVsCouponsRepository customersVsCouponsRepository;
     private final CouponService couponService;
-
     private final CouponPurchaseValidator couponPurchaseValidator;
+    private final AuthorizationValidator authorizationValidator;
     /**
      *This method checks if customer ID already purchased coupon ID
      */
@@ -37,7 +39,8 @@ public class CustomerVsCouponsService {
      *updates an amount of coupon
      *receives customer and coupon
      */
-    public CustomersVsCoupons addCouponPurchase(Customer customer, Coupon coupon) throws CouponException {
+    public CustomersVsCoupons addCouponPurchase(Customer customer, Coupon coupon) throws CouponException, AuthorizationException {
+        authorizationValidator.validateCustomer();
         couponPurchaseValidator.addValidator(customer, coupon);
 
         coupon.setAmount(couponService.getById(coupon.getId()).getAmount() - 1);
@@ -53,7 +56,8 @@ public class CustomerVsCouponsService {
     /**
      * This method returns a list of all coupons of this customer
      */
-    public List<Coupon> getCustomersCoupons(int customerId) throws SQLException {
+    public List<Coupon> getCustomersCoupons(int customerId) throws AuthorizationException {
+        authorizationValidator.validateCustomer();
         return getCouponsFromCVC(customersVsCouponsRepository.findAllByCustomer_Id(customerId));
     }
 
@@ -61,7 +65,8 @@ public class CustomerVsCouponsService {
      * This method returns a list of all coupons of this customer
      * filtered by maximum price
      */
-    public List<Coupon> getCustomersCoupons(int customerId, double maxPrice) throws SQLException {
+    public List<Coupon> getCustomersCoupons(int customerId, double maxPrice) throws AuthorizationException {
+        authorizationValidator.validateCustomer();
         return getCustomersCoupons(customerId).stream().filter(coupon -> coupon.getPrice() <= maxPrice).collect(Collectors.toList());
     }
 
@@ -69,7 +74,8 @@ public class CustomerVsCouponsService {
      * This method returns a list of all coupons of this customer
      * filtered by category
      */
-    public List<Coupon> getCustomerCoupons(int customerId, Category category) throws SQLException {
+    public List<Coupon> getCustomersCoupons(int customerId, Category category) throws AuthorizationException {
+        authorizationValidator.validateCustomer();
         return getCouponsFromCVC(customersVsCouponsRepository.findAllByCustomer_IdAndCoupon_Category(customerId, category));
     }
 

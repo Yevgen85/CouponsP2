@@ -1,9 +1,11 @@
 package com.example.couponsp2.beans;
 
 import com.example.couponsp2.services.CustomerVsCouponsService;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.*;
 
-import javax.persistence.*;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +26,7 @@ public class Coupon {
     private int id;
 
 //    @ManyToOne(cascade = CascadeType.ALL)
+    @JsonIgnore
     @ManyToOne //(cascade = CascadeType.MERGE)
     @JoinColumn(name = "company_id")
     private Company company;
@@ -42,6 +45,7 @@ public class Coupon {
     private String image;
 
 
+    @JsonIgnore
     @OneToMany(mappedBy = "coupon", cascade = CascadeType.REMOVE)
     @ToString.Exclude
     private List<CustomersVsCoupons> customersVsCoupons;

@@ -1,17 +1,16 @@
 package com.example.couponsp2.clr;
 
-import com.example.couponsp2.beans.Category;
-import com.example.couponsp2.beans.Company;
-import com.example.couponsp2.beans.Coupon;
-import com.example.couponsp2.beans.Customer;
+import com.example.couponsp2.beans.*;
 import com.example.couponsp2.custom_exceptions.CompanyException;
 import com.example.couponsp2.custom_exceptions.CouponException;
 import com.example.couponsp2.custom_exceptions.CustomerException;
 import com.example.couponsp2.services.*;
+import com.example.couponsp2.validators.AuthorizationValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.sql.SQLException;
@@ -27,7 +26,8 @@ public class AutomationDemo implements CommandLineRunner {
     public final CompanyService companyService;
     public final CouponService couponService;
     public final CustomerVsCouponsService customerVsCouponsService;
-
+    public final PasswordEncoder passwordEncoder;
+    public final LoggedClientType loggedClientType;
     @Override
     public void run(String... args) throws Exception {
         initEntities();
@@ -44,6 +44,7 @@ public class AutomationDemo implements CommandLineRunner {
             company.setPassword("password" + i);
 
             try {
+                loggedClientType.setClientType(ClientType.ADMINISTRATOR);
                 companyService.addCompany(company);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
@@ -79,12 +80,13 @@ public class AutomationDemo implements CommandLineRunner {
             customer.setLastName(i + "Customer Last Name");
 
             try {
+                loggedClientType.setClientType(ClientType.ADMINISTRATOR);
                 customerService.addCustomer(customer);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
         }
-
+        loggedClientType.setClientType(ClientType.COMPANY);
         for (int i = 1; i <= 100; i++) {
             Coupon coupon = new Coupon();
             coupon.setCategory(categoryService.getCategory(1 + random.nextInt(5)));
@@ -95,20 +97,22 @@ public class AutomationDemo implements CommandLineRunner {
             coupon.setDescription(i + "couponDescription");
             coupon.setStartDate(LocalDate.of(2022, 12,1));
             coupon.setEndDate(LocalDate.of(2022, 12, 1 + random.nextInt(30)));
-            coupon.setCompany(companyService.getOne(1 + random.nextInt(10)));
+            coupon.setCompany(companyService.getOneForAddCoupon(1 + random.nextInt(10)));
 
 
             try {
+
                 couponService.add(coupon);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
 
         }
-
+        loggedClientType.setClientType(ClientType.CUSTOMER);
         for (int i = 1; i <= 50; i++) {
+
             try {
-                Customer customer = customerService.getOne(1 + random.nextInt(10));
+                Customer customer = customerService.getOneForCouponPurchase(1 + random.nextInt(10));
                 Coupon coupon = couponService.getById(i);
                 customerVsCouponsService.addCouponPurchase(customer, coupon);
             } catch (Exception e) {

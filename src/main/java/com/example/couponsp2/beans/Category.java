@@ -1,8 +1,10 @@
 package com.example.couponsp2.beans;
 
+
+
+import jakarta.persistence.*;
 import lombok.*;
 
-import javax.persistence.*;
 
 @ToString
 @NoArgsConstructor

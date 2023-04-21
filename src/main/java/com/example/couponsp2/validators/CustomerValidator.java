@@ -26,9 +26,12 @@ public class CustomerValidator {
         }
     }
 
-    public void updateValidator(Customer customer) throws CustomerException {
+    public void updateValidator(int customerId, Customer customer) throws CustomerException {
         if (!customerRepository.existsById(customer.getId())) {
             throw new CustomerException(ErrorMsg.NO_CUSTOMER_TO_UPDATE);
+        }
+        if (customerRepository.findCustomerByEmail(customer.getEmail()).getId() != customerId) {
+            throw new CustomerException(ErrorMsg.ID_ERROR);
         }
     }
 
@@ -37,4 +40,10 @@ public class CustomerValidator {
                 throw new CustomerException(ErrorMsg.NO_CUSTOMER_EXIST);
             }
         }
+
+    public void isEmailExistValidator(String email) throws CustomerException {
+        if (!customerRepository.existsByEmail(email)) {
+            throw new CustomerException(ErrorMsg.NO_CUSTOMER_EXIST);
+        }
+    }
     }
