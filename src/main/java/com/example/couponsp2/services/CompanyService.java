@@ -84,15 +84,15 @@ public class CompanyService {
      * This method updates company
      * update can be done only if company name and company id are same as in the database
      */
-    public Company updateCompany(int id, Company company) throws CompanyException, AuthorizationException {
+    public CompanyDTO updateCompany(int id, Company company) throws CompanyException, AuthorizationException {
         authorizationValidator.validateAdmin();
         companyValidator.updateValidator(company);
-        Company companyToUpdate = companyRepository.findByEmailAndId(company.getEmail(), company.getId());
+        Company companyToUpdate = companyRepository.findByIdAndName(company.getId(), company.getName());
         if (companyToUpdate.getId() != id) {
             throw new CompanyException(ErrorMsg.LOGGED_ID_ERROR);
         }
         company.setPassword(companyToUpdate.getPassword());
-        return companyRepository.save(company);
+        return convertToCompanyDTO(companyRepository.save(company));
     }
 
     /**

@@ -48,7 +48,9 @@ public class CompanyController {
     }
 
     @PutMapping("/{id}")
-    public Company updateCompany(@PathVariable int id, @RequestBody  Company company) throws CompanyException, AuthorizationException {
+    public CompanyDTO updateCompany(@PathVariable int id, @RequestBody  Company company) throws CompanyException, AuthorizationException {
+        System.out.println("received param id: " + id);
+        System.out.println("received param company: " + company);
         return companyService.updateCompany(id, company);
     }
 

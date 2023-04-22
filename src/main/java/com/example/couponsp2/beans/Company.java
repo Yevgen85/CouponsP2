@@ -2,6 +2,8 @@ package com.example.couponsp2.beans;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,7 +27,9 @@ public class Company implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-
+    @NotEmpty(message = "Name is required, can not be empty!")
+    @Size(min = 2, max = 100, message = "Name must be between 2 to 100 symbols length")
+    @Column(name = "name")
     private String name;
     private String email;
     private String password;
