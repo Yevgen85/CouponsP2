@@ -52,6 +52,7 @@ public class CustomerController {
 
     @PutMapping("/{id}")
     public CustomerDTO updateCustomer(@PathVariable int id, @RequestBody  Customer customer) throws CustomerException, AuthorizationException {
+        System.out.println(id + " + " + customer);
         return customerService.updateCustomer(id, customer);
     }
 

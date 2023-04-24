@@ -2,6 +2,7 @@ package com.example.couponsp2.beans;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -31,7 +32,10 @@ public class Company implements UserDetails {
     @Size(min = 2, max = 100, message = "Name must be between 2 to 100 symbols length")
     @Column(name = "name")
     private String name;
+    @NotEmpty
+    @Email
     private String email;
+    @Size(min = 6, max = 100, message = "Password must be between 6 to 100 symbols length")
     private String password;
 
     @JsonIgnore

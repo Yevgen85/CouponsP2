@@ -24,26 +24,30 @@ public class Coupon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
 //    @ManyToOne(cascade = CascadeType.ALL)
     @JsonIgnore
     @ManyToOne //(cascade = CascadeType.MERGE)
     @JoinColumn(name = "company_id")
     private Company company;
-
     @OneToOne
     @JoinColumn(name = "category_id")
     private Category category;
+
     private String title;
+
     private String description;
+
     @Column(name = "start_date")
     private LocalDate startDate;
+
     @Column(name = "end_date")
     private LocalDate endDate;
-    private int amount;
-    private double price;
-    private String image;
 
+    private int amount;
+
+    private double price;
+
+    private String image;
 
     @JsonIgnore
     @OneToMany(mappedBy = "coupon", cascade = CascadeType.REMOVE)
