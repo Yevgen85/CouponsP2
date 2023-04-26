@@ -7,6 +7,7 @@ import com.example.couponsp2.custom_exceptions.CompanyException;
 import com.example.couponsp2.custom_exceptions.CustomerException;
 import com.example.couponsp2.dto.CompanyDTO;
 import com.example.couponsp2.dto.CustomerDTO;
+import com.example.couponsp2.dto.PasswordChangeDto;
 import com.example.couponsp2.repository.CustomerRepository;
 import com.example.couponsp2.services.CustomerService;
 import com.example.couponsp2.validators.AuthorizationValidator;
@@ -54,6 +55,12 @@ public class CustomerController {
     public CustomerDTO updateCustomer(@PathVariable int id, @RequestBody  Customer customer) throws CustomerException, AuthorizationException {
         System.out.println(id + " + " + customer);
         return customerService.updateCustomer(id, customer);
+    }
+
+    @PutMapping("/update-password/{id}")
+    public void updateCustomer(@PathVariable int id, @RequestBody PasswordChangeDto passwordChangeDto) throws CustomerException {
+        System.out.println(id + " + " + passwordChangeDto);
+        customerService.changePassword(id, passwordChangeDto);
     }
 
 //    @PostMapping("/filter")

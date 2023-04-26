@@ -4,6 +4,7 @@ import com.example.couponsp2.beans.*;
 import com.example.couponsp2.custom_exceptions.AuthorizationException;
 import com.example.couponsp2.custom_exceptions.CustomerException;
 import com.example.couponsp2.dto.CustomerDTO;
+import com.example.couponsp2.dto.PasswordChangeDto;
 import com.example.couponsp2.repository.CustomerRepository;
 import com.example.couponsp2.validators.AuthorizationValidator;
 import com.example.couponsp2.validators.CustomerValidator;
@@ -64,7 +65,7 @@ public class CustomerService {
     public CustomerDTO updateCustomer(int customerId, Customer customer) throws CustomerException, AuthorizationException {
         authorizationValidator.validateAdmin();
         customerValidator.updateValidator(customerId, customer);
-        Customer customerToUpdate = customerRepository.findCustomerByEmail(customer.getEmail());
+        Customer customerToUpdate = customerRepository.findById(customer.getId()).orElse(null);
         customer.setPassword(customerToUpdate.getPassword());
         return convertToCustomerDTO(customerRepository.save(customer));
     }
@@ -126,5 +127,10 @@ public class CustomerService {
 //        authorizationValidator.validateCustomer();
         customerValidator.isExistValidator(customerId);
         return customerRepository.findById(customerId).get();
+    }
+
+    public void changePassword(int customerId, PasswordChangeDto passwordChangeDTO) throws CustomerException {
+        customerValidator.passwordValidator(customerId, passwordChangeDTO);
+
     }
 }

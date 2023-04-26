@@ -32,8 +32,8 @@ public class Company implements UserDetails {
     @Size(min = 2, max = 100, message = "Name must be between 2 to 100 symbols length")
     @Column(name = "name")
     private String name;
-    @NotEmpty
-    @Email
+    @NotEmpty(message = "Email is required, can not be empty!")
+//    @Email(regexp = "^\\w+([\\.-]?\\w+)*@([\\w-]+\\.)+[\\w]{2,4}$", message = "Invalid email format")
     private String email;
     @Size(min = 6, max = 100, message = "Password must be between 6 to 100 symbols length")
     private String password;
