@@ -131,6 +131,8 @@ public class CustomerService {
 
     public void changePassword(int customerId, PasswordChangeDto passwordChangeDTO) throws CustomerException {
         customerValidator.passwordValidator(customerId, passwordChangeDTO);
-
+        Customer customer = customerRepository.findById(customerId).get();
+        customer.setPassword(passwordEncoder.encode(passwordChangeDTO.getNewPassword()));
+        customerRepository.save(customer);
     }
 }

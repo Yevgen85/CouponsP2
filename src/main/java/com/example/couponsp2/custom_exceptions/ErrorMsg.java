@@ -32,6 +32,7 @@ public enum ErrorMsg {
     NO_SUCH_COUPON_TO_DELETE("No Such Coupon To Delete"),
     LOGGED_ID_ERROR("Logged Id Is Not As In The Path"),
     NOT_AUTHORIZED("Not Authorized for This Kind Of Activity!"),
+    OLD_PASSWORD_INCORRECT("Old Password Incorrect"),
     ID_ERROR("Id Error! Id vs Email Mismatch");
 
     private final String error;

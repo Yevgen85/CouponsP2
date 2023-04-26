@@ -55,5 +55,9 @@ public class CustomerValidator {
         if (customerId != passwordChangeDto.getId()) {
             throw new CustomerException(ErrorMsg.LOGGED_ID_ERROR);
         }
+        Customer customer = customerRepository.findById(customerId).get();
+        if (!passwordEncoder.matches(passwordChangeDto.getOldPassword(), customer.getPassword())) {
+            throw new CustomerException(ErrorMsg.OLD_PASSWORD_INCORRECT);
+        }
     }
     }

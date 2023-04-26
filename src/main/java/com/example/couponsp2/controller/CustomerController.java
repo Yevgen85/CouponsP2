@@ -63,10 +63,6 @@ public class CustomerController {
         customerService.changePassword(id, passwordChangeDto);
     }
 
-//    @PostMapping("/filter")
-//    public boolean isExist(@RequestParam String email, @RequestParam String password) {
-//        return companyService.isExist(email, password);
-//    }
 
 
 }
