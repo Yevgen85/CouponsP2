@@ -32,6 +32,7 @@ public class AdministratorService {
     public Map<String, Object> buildClaims(User user) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("username", user.getUsername());
+        claims.put("id", Administrator.ID);
         return claims;
     }
 }

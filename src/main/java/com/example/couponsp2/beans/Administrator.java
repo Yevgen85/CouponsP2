@@ -22,6 +22,8 @@ import java.util.Collection;
 public class Administrator implements UserDetails {
 
     private final PasswordEncoder passwordEncoder;
+
+    public static final int ID = -1;
     public static final String EMAIL = "admin@admin.com";
     public static final String PASSWORD =  "admin";
 

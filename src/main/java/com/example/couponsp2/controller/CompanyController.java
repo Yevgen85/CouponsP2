@@ -5,7 +5,9 @@ import com.example.couponsp2.beans.Company;
 import com.example.couponsp2.beans.LoggedClientType;
 import com.example.couponsp2.custom_exceptions.AuthorizationException;
 import com.example.couponsp2.custom_exceptions.CompanyException;
+import com.example.couponsp2.custom_exceptions.CustomerException;
 import com.example.couponsp2.dto.CompanyDTO;
+import com.example.couponsp2.dto.PasswordChangeDto;
 import com.example.couponsp2.services.CompanyService;
 import com.example.couponsp2.validators.AuthorizationValidator;
 import lombok.RequiredArgsConstructor;
@@ -54,10 +56,11 @@ public class CompanyController {
         return companyService.updateCompany(id, company);
     }
 
-//    @PostMapping("/filter")
-//    public boolean isExist(@RequestParam String email, @RequestParam String password) throws SQLException {
-//        return companyService.isExist(email, password);
-//    }
+    @PutMapping("/update-password/{id}")
+    public void updateCompany(@PathVariable int id, @RequestBody PasswordChangeDto passwordChangeDto) throws CompanyException {
+        System.out.println(id + " + " + passwordChangeDto);
+        companyService.changePassword(id, passwordChangeDto);
+    }
 
 
 

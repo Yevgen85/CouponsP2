@@ -17,6 +17,8 @@ public class TokenConfig {
 
     private final String SECRET_KEY = "1234";
     private final LoggedClientType loggedClientType;
+//    private int id;
+
     public String generateToken(Map<String, Object> claims) {
         String token = Jwts.builder()
                 .addClaims(claims)
@@ -73,4 +75,21 @@ public class TokenConfig {
     }
 
 
+    public int getIdFromToken(String token) {
+        int id = 0;
+        try {
+            id = (int) Jwts.parser()
+                    .setSigningKey(SECRET_KEY)
+                    .parseClaimsJws(token)
+                    .getBody()
+                    .get("id");
+            System.out.println("id => " + id);
+            loggedClientType.setId(id);
+            System.out.println("logged id set to: " + id);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        System.out.println(id);
+        return id;
+    }
 }

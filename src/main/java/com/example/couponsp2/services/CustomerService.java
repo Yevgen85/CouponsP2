@@ -120,6 +120,7 @@ public class CustomerService {
         claims.put("username", customer.getUsername());
         claims.put("firstName", customer.getFirstName());
         claims.put("lastName", customer.getLastName());
+        claims.put("id", customer.getId());
         return claims;
     }
 

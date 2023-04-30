@@ -42,6 +42,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         final String token = tokenHeader.substring(7);
         String userName = this.tokenConfig.getUserNameFromToken(token);
         String clientType = this.tokenConfig.getClientTypeFromToken(token);
+        this.tokenConfig.getIdFromToken(token);
 
         if (!clientType.equals(ClientType.ADMINISTRATOR.toString()) && request.getRequestURI().contains("admin")) {
             throw new Exception("Error!!");

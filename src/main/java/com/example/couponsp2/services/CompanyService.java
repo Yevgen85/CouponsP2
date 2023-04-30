@@ -2,11 +2,14 @@ package com.example.couponsp2.services;
 
 import com.example.couponsp2.beans.ClientType;
 import com.example.couponsp2.beans.Company;
+import com.example.couponsp2.beans.Customer;
 import com.example.couponsp2.beans.LoggedClientType;
 import com.example.couponsp2.custom_exceptions.AuthorizationException;
 import com.example.couponsp2.custom_exceptions.CompanyException;
+import com.example.couponsp2.custom_exceptions.CustomerException;
 import com.example.couponsp2.custom_exceptions.ErrorMsg;
 import com.example.couponsp2.dto.CompanyDTO;
+import com.example.couponsp2.dto.PasswordChangeDto;
 import com.example.couponsp2.repository.CompanyRepository;
 import com.example.couponsp2.validators.AuthorizationValidator;
 import com.example.couponsp2.validators.CompanyValidator;
@@ -146,7 +149,14 @@ public class CompanyService {
         Map<String, Object> claims = new HashMap<>();
         claims.put("username", company.getUsername());
         claims.put("name", company.getName());
+        claims.put("id", company.getId());
         return claims;
     }
 
+    public void changePassword(int companyId, PasswordChangeDto passwordChangeDTO) throws CompanyException {
+        companyValidator.passwordValidator(companyId, passwordChangeDTO);
+        Company company = companyRepository.findById(companyId).get();
+        company.setPassword(passwordEncoder.encode(passwordChangeDTO.getNewPassword()));
+        companyRepository.save(company);
+    }
 }

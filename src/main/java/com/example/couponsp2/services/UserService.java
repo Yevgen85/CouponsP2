@@ -19,7 +19,7 @@ public class UserService implements UserDetailsService {
 
     private final CompanyService companyService;
     private final CustomerService customerService;
-    private final TokenConfig tokenConfig;
+//    private final TokenConfig tokenConfig;
     private final PasswordEncoder passwordEncoder;
 
     public UserService(CompanyService companyService,
@@ -27,7 +27,7 @@ public class UserService implements UserDetailsService {
                        @Lazy PasswordEncoder passwordEncoder,
                        CustomerService customerService) {
         this.companyService = companyService;
-        this.tokenConfig = tokenConfig;
+//        this.tokenConfig = tokenConfig;
         this.passwordEncoder = passwordEncoder;
         this.customerService = customerService;
     }
@@ -47,6 +47,6 @@ public class UserService implements UserDetailsService {
         if (customer != null) {
             return this.customerService.findByEmail(username);
         }
-        throw new Exception("LoadUser Falied! No User Found!");
+        throw new Exception("LoadUser Failed! No User Found!");
     }
 }
