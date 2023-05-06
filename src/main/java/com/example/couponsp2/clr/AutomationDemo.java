@@ -40,7 +40,7 @@ public class AutomationDemo implements CommandLineRunner {
         for (int i = 1; i <= 10; i++) {
             Company company = new Company();
             company.setName(" Company Name" + i);
-            company.setEmail(i + "@company");
+            company.setEmail(i + "@company.com");
             company.setPassword("password" + i);
 
             try {
@@ -95,8 +95,8 @@ public class AutomationDemo implements CommandLineRunner {
             coupon.setImage(i + "couponImage");
             coupon.setAmount(1 + random.nextInt( 10));
             coupon.setDescription(i + "couponDescription");
-            coupon.setStartDate(LocalDate.of(2022, 12,1));
-            coupon.setEndDate(LocalDate.of(2022, 12, 1 + random.nextInt(30)));
+            coupon.setStartDate(LocalDate.of(2023, 12,1));
+            coupon.setEndDate(LocalDate.of(2024, 12, 1 + random.nextInt(30)));
             coupon.setCompany(companyService.getOneForAddCoupon(1 + random.nextInt(10)));
 
 

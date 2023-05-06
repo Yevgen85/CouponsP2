@@ -33,7 +33,8 @@ public enum ErrorMsg {
     LOGGED_ID_ERROR("Logged Id Is Not As In The Path"),
     NOT_AUTHORIZED("Not Authorized for This Kind Of Activity!"),
     OLD_PASSWORD_INCORRECT("Old Password Incorrect"),
-    ID_ERROR("Id Error! Id vs Email Mismatch");
+    ID_ERROR("Id Error! Id vs Email Mismatch"),
+    BAD_CREDENTIALS("Email Or Password Is Incorrect");
 
     private final String error;
 

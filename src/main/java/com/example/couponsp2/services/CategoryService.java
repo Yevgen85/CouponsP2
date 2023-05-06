@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CategoryService{
@@ -19,6 +21,13 @@ public class CategoryService{
             this.categoryRepository.save(category);
         }
         System.out.println("Category exists");
+    }
+
+    /**
+     * This method returns all categories
+     */
+    public List<Category> getAllCategories() {
+        return this.categoryRepository.findAll();
     }
 
     /**

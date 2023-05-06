@@ -3,6 +3,8 @@ package com.example.couponsp2.services;
 import com.example.couponsp2.Token.TokenConfig;
 import com.example.couponsp2.beans.Company;
 import com.example.couponsp2.beans.Customer;
+import com.example.couponsp2.custom_exceptions.AuthorizationException;
+import com.example.couponsp2.custom_exceptions.ErrorMsg;
 import lombok.SneakyThrows;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.User;
@@ -33,7 +35,7 @@ public class UserService implements UserDetailsService {
     }
 
 
-    @SneakyThrows
+//    @SneakyThrows
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         if (username.equals("admin@admin.com")) {
@@ -47,6 +49,10 @@ public class UserService implements UserDetailsService {
         if (customer != null) {
             return this.customerService.findByEmail(username);
         }
-        throw new Exception("LoadUser Failed! No User Found!");
+        try {
+            throw new AuthorizationException(ErrorMsg.BAD_CREDENTIALS);
+        } catch (AuthorizationException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

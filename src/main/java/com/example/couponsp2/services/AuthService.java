@@ -4,6 +4,8 @@ package com.example.couponsp2.services;
 import com.example.couponsp2.Token.TokenConfig;
 import com.example.couponsp2.beans.Company;
 import com.example.couponsp2.beans.Customer;
+import com.example.couponsp2.custom_exceptions.AuthorizationException;
+import com.example.couponsp2.custom_exceptions.ErrorMsg;
 import com.example.couponsp2.dto.LoginRequestDTO;
 import com.example.couponsp2.dto.TokenResponseDTO;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +30,7 @@ public class AuthService {
     private final AdministratorService adminService;
     private final CustomerService customerService;
 
-    public TokenResponseDTO validateLoginDetails(LoginRequestDTO loginRequestDTO) {
+    public TokenResponseDTO validateLoginDetails(LoginRequestDTO loginRequestDTO) throws AuthorizationException {
         boolean isLoginDetailsValid = this.isLoginDetailsValid(loginRequestDTO);
         if (isLoginDetailsValid) {
             UserDetails userDetails = this.userService.loadUserByUsername(loginRequestDTO.getUsername());
@@ -42,7 +44,7 @@ public class AuthService {
             String token = this.tokenConfig.generateToken(claims);
             return new TokenResponseDTO(token);
         }
-        return null;
+        throw new AuthorizationException(ErrorMsg.BAD_CREDENTIALS);
     }
 
     private boolean isLoginDetailsValid(LoginRequestDTO loginRequestDTO) {
