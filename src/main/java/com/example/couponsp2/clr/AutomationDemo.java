@@ -74,7 +74,7 @@ public class AutomationDemo implements CommandLineRunner {
 
         for (int i = 1; i <= 10; i++) {
             Customer customer = new Customer();
-            customer.setEmail(i + "customer@mail");
+            customer.setEmail(i + "customer@mail.com");
             customer.setPassword(i + "customerPassword");
             customer.setFirstName(i + "Customer First Name");
             customer.setLastName(i + "Customer Last Name");
@@ -97,7 +97,8 @@ public class AutomationDemo implements CommandLineRunner {
             coupon.setDescription(i + "couponDescription");
             coupon.setStartDate(LocalDate.of(2023, 12,1));
             coupon.setEndDate(LocalDate.of(2024, 12, 1 + random.nextInt(30)));
-            coupon.setCompany(companyService.getOneForAddCoupon(1 + random.nextInt(10)));
+            loggedClientType.setId(1 + random.nextInt(10));
+//            coupon.setCompany(companyService.getOneForAddCoupon(1 + random.nextInt(10)));
 
 
             try {
@@ -109,7 +110,7 @@ public class AutomationDemo implements CommandLineRunner {
 
         }
         loggedClientType.setClientType(ClientType.CUSTOMER);
-        for (int i = 1; i <= 50; i++) {
+        for (int i = 1; i <= 100; i++) {
 
             try {
                 Customer customer = customerService.getOneForCouponPurchase(1 + random.nextInt(10));

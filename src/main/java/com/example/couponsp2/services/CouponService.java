@@ -3,6 +3,7 @@ package com.example.couponsp2.services;
 import com.example.couponsp2.beans.Category;
 import com.example.couponsp2.beans.Company;
 import com.example.couponsp2.beans.Coupon;
+import com.example.couponsp2.beans.LoggedClientType;
 import com.example.couponsp2.custom_exceptions.AuthorizationException;
 import com.example.couponsp2.custom_exceptions.CompanyException;
 import com.example.couponsp2.custom_exceptions.CouponException;
@@ -29,6 +30,8 @@ public class CouponService {
     private final CouponRepository couponRepository;
     private final CouponValidator couponValidator;
     private final CompanyService companyService;
+
+    private final LoggedClientType loggedClientType;
     private final AuthorizationValidator authorizationValidator;
 //    Company company = (Company) SecurityContextHolder.getContext().getAuthentication().getDetails();
 
@@ -38,8 +41,12 @@ public class CouponService {
      * checks if there aren't matches of title with the database
      * if there was a match, no coupon added
      */
-    public Coupon add(Coupon coupon) throws CouponException, AuthorizationException {
+    public Coupon add(Coupon coupon) throws CouponException, AuthorizationException, CompanyException {
         authorizationValidator.validateCompany();
+        System.out.println("Accepted Coupon:");
+        System.out.println(coupon.toString());
+        Company company = companyService.getOneForAddCoupon(loggedClientType.getId());
+        coupon.setCompany(company);
         couponValidator.addValidator(coupon);
         return couponRepository.save(coupon);
     }
@@ -48,8 +55,10 @@ public class CouponService {
      *This method updates coupon
      *Update can be done if company id and coupon id has a match with the database
      */
-    public Coupon update(Coupon coupon) throws CouponException, AuthorizationException {
+    public Coupon update(Coupon coupon) throws CouponException, AuthorizationException, CompanyException {
         authorizationValidator.validateCompanyOrCustomer();
+        Company company = couponRepository.findCouponById(coupon.getId()).getCompany();
+        coupon.setCompany(company);
         couponValidator.updateValidator(coupon);
         return couponRepository.save(coupon);
     }
@@ -69,7 +78,7 @@ public class CouponService {
      * return true or false
      */
     public boolean isExist(int id, int companyId) {
-        return couponRepository.existsByIdAndCompanyId(id, companyId);
+        return couponRepository.existsCouponByIdAndCompanyId(id, companyId);
     }
 
     /**
@@ -159,5 +168,7 @@ public class CouponService {
         System.out.println("Cleaning Expired Coupons...");
         couponRepository.deleteAll(getExpiredCoupons());
     }
+
+
 
 }

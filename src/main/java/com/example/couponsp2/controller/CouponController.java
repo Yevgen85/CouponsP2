@@ -63,12 +63,14 @@ private final CouponService couponService;
     }
 
     @PostMapping()
-    public Coupon addCoupon(@RequestBody Coupon coupon) throws CouponException, AuthorizationException {
+    public Coupon addCoupon(@RequestBody Coupon coupon) throws CouponException, AuthorizationException, CompanyException {
+        System.out.println("Adding coupon: " + coupon.toString());
         return couponService.add(coupon);
     }
 
     @PutMapping("/{id}")
-    public Coupon updateCoupon(@RequestBody  Coupon coupon) throws CouponException, AuthorizationException {
+    public Coupon updateCoupon(@RequestBody  Coupon coupon) throws CouponException, AuthorizationException, CompanyException {
+        System.out.println(coupon.toString());
         return couponService.update(coupon);
     }
 

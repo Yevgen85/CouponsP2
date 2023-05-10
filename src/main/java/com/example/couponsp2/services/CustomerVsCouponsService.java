@@ -6,6 +6,7 @@ import com.example.couponsp2.beans.Customer;
 
 import com.example.couponsp2.beans.CustomersVsCoupons;
 import com.example.couponsp2.custom_exceptions.AuthorizationException;
+import com.example.couponsp2.custom_exceptions.CompanyException;
 import com.example.couponsp2.custom_exceptions.CouponException;
 import com.example.couponsp2.repository.CustomersVsCouponsRepository;
 import com.example.couponsp2.validators.AuthorizationValidator;
@@ -39,7 +40,7 @@ public class CustomerVsCouponsService {
      *updates an amount of coupon
      *receives customer and coupon
      */
-    public CustomersVsCoupons addCouponPurchase(Customer customer, Coupon coupon) throws CouponException, AuthorizationException {
+    public CustomersVsCoupons addCouponPurchase(Customer customer, Coupon coupon) throws CouponException, AuthorizationException, CompanyException {
         authorizationValidator.validateCustomer();
         couponPurchaseValidator.addValidator(customer, coupon);
 

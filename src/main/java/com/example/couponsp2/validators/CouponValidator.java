@@ -28,7 +28,7 @@ public class CouponValidator {
     }
 
     public void updateValidator(Coupon coupon) throws CouponException {
-        if (!couponRepository.existsByIdAndCompanyId(coupon.getId(), coupon.getCompany().getId()))
+        if (!couponRepository.existsCouponByIdAndCompanyId(coupon.getId(), coupon.getCompany().getId()))
             throw new CouponException(ErrorMsg.COUPON_NOT_EXIST);
     }
 
