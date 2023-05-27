@@ -30,15 +30,21 @@ public class AuthService {
     private final AdministratorService adminService;
     private final CustomerService customerService;
 
-    public TokenResponseDTO validateLoginDetails(LoginRequestDTO loginRequestDTO) throws AuthorizationException {
+    public TokenResponseDTO validateLoginDetails(LoginRequestDTO loginRequestDTO) throws Exception {
         boolean isLoginDetailsValid = this.isLoginDetailsValid(loginRequestDTO);
         if (isLoginDetailsValid) {
             UserDetails userDetails = this.userService.loadUserByUsername(loginRequestDTO.getUsername());
             Map<String, Object> claims = null;
+            try {
             switch (loginRequestDTO.getClientType()) {
-                case ADMINISTRATOR -> claims = this.adminService.buildClaims((User) userDetails);
-                case COMPANY -> claims = this.companyService.buildClaims((Company) userDetails);
-                case CUSTOMER -> claims = this.customerService.buildClaims((Customer) userDetails);
+
+                    case ADMINISTRATOR -> claims = this.adminService.buildClaims((User) userDetails);
+                    case COMPANY -> claims = this.companyService.buildClaims((Company) userDetails);
+                    case CUSTOMER -> claims = this.customerService.buildClaims((Customer) userDetails);
+                }
+            }
+            catch (Exception e) {
+                throw new AuthorizationException(ErrorMsg.BAD_CREDENTIALS);
             }
             claims.put("clientType", loginRequestDTO.getClientType());
             String token = this.tokenConfig.generateToken(claims);

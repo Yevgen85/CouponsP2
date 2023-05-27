@@ -10,6 +10,7 @@ import com.example.couponsp2.dto.CompanyDTO;
 import com.example.couponsp2.dto.PasswordChangeDto;
 import com.example.couponsp2.services.CompanyService;
 import com.example.couponsp2.validators.AuthorizationValidator;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.modelmapper.ModelMapper;
@@ -45,19 +46,19 @@ public class CompanyController {
     }
 
     @PostMapping()
-    public CompanyDTO addCompany(@RequestBody Company company) throws CompanyException, AuthorizationException {
+    public CompanyDTO addCompany(@Valid @RequestBody Company company) throws CompanyException, AuthorizationException {
         return  companyService.addCompany(company);
     }
 
     @PutMapping("/{id}")
-    public CompanyDTO updateCompany(@PathVariable int id, @RequestBody  Company company) throws CompanyException, AuthorizationException {
+    public CompanyDTO updateCompany(@PathVariable int id, @Valid @RequestBody  Company company) throws CompanyException, AuthorizationException {
         System.out.println("received param id: " + id);
         System.out.println("received param company: " + company);
         return companyService.updateCompany(id, company);
     }
 
     @PutMapping("/update-password/{id}")
-    public void updateCompany(@PathVariable int id, @RequestBody PasswordChangeDto passwordChangeDto) throws CompanyException {
+    public void updateCompanyPassword(@PathVariable int id, @Valid @RequestBody PasswordChangeDto passwordChangeDto) throws CompanyException {
         System.out.println(id + " + " + passwordChangeDto);
         companyService.changePassword(id, passwordChangeDto);
     }

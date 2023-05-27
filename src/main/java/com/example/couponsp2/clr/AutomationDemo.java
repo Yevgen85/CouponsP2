@@ -36,6 +36,7 @@ public class AutomationDemo implements CommandLineRunner {
     public void initEntities() throws CompanyException, CustomerException, CouponException, SQLException {
 
         Random random = new Random();
+        int imageNum = 0;
 
         for (int i = 1; i <= 10; i++) {
             Company company = new Company();
@@ -88,11 +89,12 @@ public class AutomationDemo implements CommandLineRunner {
         }
         loggedClientType.setClientType(ClientType.COMPANY);
         for (int i = 1; i <= 100; i++) {
+
             Coupon coupon = new Coupon();
             coupon.setCategory(categoryService.getCategory(1 + random.nextInt(5)));
             coupon.setTitle(i + "couponTitle");
             coupon.setPrice(50.0 + random.nextInt(250));
-            coupon.setImage(i + "couponImage");
+            coupon.setImage("https://picsum.photos/seed/" + i + "/150/150");
             coupon.setAmount(1 + random.nextInt( 10));
             coupon.setDescription(i + "couponDescription");
             coupon.setStartDate(LocalDate.of(2023, 12,1));

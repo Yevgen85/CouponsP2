@@ -14,14 +14,10 @@ import java.sql.SQLException;
 @RequiredArgsConstructor
 @RequestMapping("api/auth/")
 public class AuthController {
-
     private final AuthService authService;
 
-
-
     @PostMapping("/login")
-    public TokenResponseDTO login(@RequestBody LoginRequestDTO loginRequestDTO) throws AuthorizationException {
+    public TokenResponseDTO login(@RequestBody LoginRequestDTO loginRequestDTO) throws Exception {
         return authService.validateLoginDetails(loginRequestDTO);
-
     }
 }

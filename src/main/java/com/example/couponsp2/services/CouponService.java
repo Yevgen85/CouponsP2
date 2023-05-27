@@ -1,14 +1,12 @@
 package com.example.couponsp2.services;
 
-import com.example.couponsp2.beans.Category;
-import com.example.couponsp2.beans.Company;
-import com.example.couponsp2.beans.Coupon;
-import com.example.couponsp2.beans.LoggedClientType;
+import com.example.couponsp2.beans.*;
 import com.example.couponsp2.custom_exceptions.AuthorizationException;
 import com.example.couponsp2.custom_exceptions.CompanyException;
 import com.example.couponsp2.custom_exceptions.CouponException;
 import com.example.couponsp2.custom_exceptions.ErrorMsg;
 import com.example.couponsp2.repository.CouponRepository;
+import com.example.couponsp2.repository.CustomersVsCouponsRepository;
 import com.example.couponsp2.validators.AuthorizationValidator;
 import com.example.couponsp2.validators.CouponValidator;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +31,7 @@ public class CouponService {
 
     private final LoggedClientType loggedClientType;
     private final AuthorizationValidator authorizationValidator;
+
 //    Company company = (Company) SecurityContextHolder.getContext().getAuthentication().getDetails();
 
 //    private final UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getDetails();
@@ -166,7 +165,7 @@ public class CouponService {
     @Scheduled(cron = "@midnight")
     public void cleanExpiredDateCoupons() throws InterruptedException {
         System.out.println("Cleaning Expired Coupons...");
-        couponRepository.deleteAll(getExpiredCoupons());
+        couponRepository.deleteAllByEndDateBefore(LocalDate.now());
     }
 
 

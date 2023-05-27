@@ -11,6 +11,7 @@ import com.example.couponsp2.dto.PasswordChangeDto;
 import com.example.couponsp2.repository.CustomerRepository;
 import com.example.couponsp2.services.CustomerService;
 import com.example.couponsp2.validators.AuthorizationValidator;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -47,18 +48,18 @@ public class CustomerController {
     }
 
     @PostMapping()
-    public CustomerDTO addCustomer(@RequestBody Customer customer) throws CustomerException, AuthorizationException {
+    public CustomerDTO addCustomer(@Valid @RequestBody Customer customer) throws CustomerException, AuthorizationException {
         return customerService.addCustomer(customer);
     }
 
     @PutMapping("/{id}")
-    public CustomerDTO updateCustomer(@PathVariable int id, @RequestBody  Customer customer) throws CustomerException, AuthorizationException {
+    public CustomerDTO updateCustomer(@PathVariable int id, @Valid @RequestBody  Customer customer) throws CustomerException, AuthorizationException {
         System.out.println(id + " + " + customer);
         return customerService.updateCustomer(id, customer);
     }
 
     @PutMapping("/update-password/{id}")
-    public void updateCustomer(@PathVariable int id, @RequestBody PasswordChangeDto passwordChangeDto) throws CustomerException {
+    public void updateCustomer(@PathVariable int id, @Valid @RequestBody PasswordChangeDto passwordChangeDto) throws CustomerException {
         System.out.println(id + " + " + passwordChangeDto);
         customerService.changePassword(id, passwordChangeDto);
     }

@@ -34,7 +34,7 @@ public enum ErrorMsg {
     NOT_AUTHORIZED("Not Authorized for This Kind Of Activity!"),
     OLD_PASSWORD_INCORRECT("Old Password Incorrect"),
     ID_ERROR("Id Error! Id vs Email Mismatch"),
-    BAD_CREDENTIALS("Email Or Password Is Incorrect");
+    BAD_CREDENTIALS("Email, Password Or Client Type Are Incorrect");
 
     private final String error;
 

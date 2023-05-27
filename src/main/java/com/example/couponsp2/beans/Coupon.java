@@ -3,6 +3,7 @@ package com.example.couponsp2.beans;
 import com.example.couponsp2.services.CustomerVsCouponsService;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 
@@ -16,7 +17,6 @@ import java.util.Objects;
 @AllArgsConstructor
 @Setter
 @Getter
-
 @Entity
 @Table(name = "coupons")
 public class Coupon {
@@ -33,20 +33,34 @@ public class Coupon {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @NotEmpty(message = "Title is required, can not be empty!")
+    @Size(min = 2, max = 100, message = "Title must be between 2 to 100 symbols length")
     private String title;
 
+    @NotEmpty(message = "Description is required, can not be empty!")
+    @Size(min = 2, max = 100, message = "Description must be between 2 to 100 symbols length")
     private String description;
 
+    @FutureOrPresent(message = "Start date must be today or after today!")
     @Column(name = "start_date")
     private LocalDate startDate;
 
+    @Future(message = "End date must be from tomorrow!")
     @Column(name = "end_date")
     private LocalDate endDate;
 
+    @NotNull(message = "Amount is required, can not be empty!")
+    @Min(value = 0, message = "Amount must be minimum 0!")
+    @Max(value = 1000, message = "Amount can be maximum 1,000")
     private int amount;
 
+    @NotNull(message = "Price is required, can not be empty!")
+    @Min(value = 1, message = "Price must be minimum 1!")
+    @Max(value = 1000000, message = "Price can be maximum 1,000,000")
     private double price;
 
+    @NotEmpty(message = "Image is required, can not be empty!")
+    @Size(min = 1, max = 100, message = "Image must be between 1 to 100 symbols length")
     private String image;
 
     @JsonIgnore

@@ -1,6 +1,7 @@
 package com.example.couponsp2.validators;
 
 import com.example.couponsp2.beans.ClientType;
+import com.example.couponsp2.beans.Customer;
 import com.example.couponsp2.beans.LoggedClientType;
 import com.example.couponsp2.custom_exceptions.AuthorizationException;
 import com.example.couponsp2.custom_exceptions.ErrorMsg;
@@ -30,9 +31,16 @@ public class AuthorizationValidator {
             throw new AuthorizationException(ErrorMsg.NOT_AUTHORIZED);
     }
 
-    public void validateCompanyOrCustomer() throws AuthorizationException {
-        if (!loggedClientType.getClientType().equals(ClientType.COMPANY) && !loggedClientType.getClientType().equals(ClientType.CUSTOMER))
+    public void validateCustomer(Customer customer) throws AuthorizationException {
+        if (!loggedClientType.getClientType().equals(ClientType.CUSTOMER) && loggedClientType.getId() != customer.getId())
             throw new AuthorizationException(ErrorMsg.NOT_AUTHORIZED);
+    }
+
+    public void validateCompanyOrCustomer() throws AuthorizationException {
+        if (!loggedClientType.getClientType().equals(ClientType.COMPANY) && !loggedClientType.getClientType().equals(ClientType.CUSTOMER)) {
+            System.out.println("this one triggered");
+            throw new AuthorizationException(ErrorMsg.NOT_AUTHORIZED);
+        }
     }
 
     public void validateAdminOrCompany() throws AuthorizationException {

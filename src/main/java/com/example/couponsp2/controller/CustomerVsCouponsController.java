@@ -45,13 +45,15 @@ public class CustomerVsCouponsController {
     @PostMapping("/{id}")
     public Coupon addCouponPurchase(@PathVariable int id, @RequestBody Coupon coupon) throws AuthorizationException, CouponException, CompanyException, CustomerException {
 
+        System.out.println(id);
+        System.out.println(coupon);
         // Move this 4 rows to service!!!
         Customer customer = customerService.getOneForCouponPurchase(loggedClientType.getId());
-        Coupon couponToAdd = couponService.getById(coupon.getId());
+        Coupon couponToAdd = couponService.getById(id);
         System.out.println(couponToAdd.toString());
         System.out.println(customer.toString());
 
-        customerVsCouponsService.addCouponPurchase(customer, couponToAdd);
+        customerVsCouponsService.addCouponPurchase(customer, coupon);
 
         return coupon;
     }

@@ -18,11 +18,13 @@ public class CouponPurchaseValidator {
     private final CustomersVsCouponsRepository customersVsCouponsRepository;
 
     public void addValidator(Customer customer, Coupon coupon) throws CouponException, AuthorizationException {
+
+        if (customersVsCouponsRepository.existsByCouponIdAndCustomerId(coupon.getId(), customer.getId())) {
+            throw new CouponException(ErrorMsg.CANT_PURCHASE_SAME_COUPON_TWICE);
+        }
+
         if (couponService.getById(coupon.getId()).getAmount() < 1)
             throw new CouponException(ErrorMsg.COUPON_AMOUNT_ZERO);
-
-        if (customersVsCouponsRepository.existsByCouponIdAndCustomerId(coupon.getId(), customer.getId()))
-            throw new CouponException(ErrorMsg.CANT_PURCHASE_SAME_COUPON_TWICE);
 
     }
 

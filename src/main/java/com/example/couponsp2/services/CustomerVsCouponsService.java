@@ -41,7 +41,7 @@ public class CustomerVsCouponsService {
      *receives customer and coupon
      */
     public CustomersVsCoupons addCouponPurchase(Customer customer, Coupon coupon) throws CouponException, AuthorizationException, CompanyException {
-        authorizationValidator.validateCustomer();
+        authorizationValidator.validateCustomer(customer);
         couponPurchaseValidator.addValidator(customer, coupon);
 
         coupon.setAmount(couponService.getById(coupon.getId()).getAmount() - 1);

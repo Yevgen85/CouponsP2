@@ -11,6 +11,7 @@ import com.example.couponsp2.dto.CustomerDTO;
 import com.example.couponsp2.services.CouponService;
 import com.example.couponsp2.services.CustomerVsCouponsService;
 import com.example.couponsp2.validators.AuthorizationValidator;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -63,13 +64,13 @@ private final CouponService couponService;
     }
 
     @PostMapping()
-    public Coupon addCoupon(@RequestBody Coupon coupon) throws CouponException, AuthorizationException, CompanyException {
+    public Coupon addCoupon(@Valid @RequestBody Coupon coupon) throws CouponException, AuthorizationException, CompanyException {
         System.out.println("Adding coupon: " + coupon.toString());
         return couponService.add(coupon);
     }
 
     @PutMapping("/{id}")
-    public Coupon updateCoupon(@RequestBody  Coupon coupon) throws CouponException, AuthorizationException, CompanyException {
+    public Coupon updateCoupon(@PathVariable int id, @Valid @RequestBody Coupon coupon) throws CouponException, AuthorizationException, CompanyException {
         System.out.println(coupon.toString());
         return couponService.update(coupon);
     }
