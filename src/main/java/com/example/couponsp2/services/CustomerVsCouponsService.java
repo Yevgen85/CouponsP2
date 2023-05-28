@@ -8,6 +8,7 @@ import com.example.couponsp2.beans.CustomersVsCoupons;
 import com.example.couponsp2.custom_exceptions.AuthorizationException;
 import com.example.couponsp2.custom_exceptions.CompanyException;
 import com.example.couponsp2.custom_exceptions.CouponException;
+import com.example.couponsp2.repository.CouponRepository;
 import com.example.couponsp2.repository.CustomersVsCouponsRepository;
 import com.example.couponsp2.validators.AuthorizationValidator;
 import com.example.couponsp2.validators.CouponPurchaseValidator;
@@ -26,6 +27,8 @@ public class CustomerVsCouponsService {
     private final CouponService couponService;
     private final CouponPurchaseValidator couponPurchaseValidator;
     private final AuthorizationValidator authorizationValidator;
+    private final CouponRepository couponRepository;
+
     /**
      *This method checks if customer ID already purchased coupon ID
      */
@@ -45,7 +48,7 @@ public class CustomerVsCouponsService {
         couponPurchaseValidator.addValidator(customer, coupon);
 
         coupon.setAmount(couponService.getById(coupon.getId()).getAmount() - 1);
-        couponService.update(coupon);
+        couponRepository.save(coupon);
 
         CustomersVsCoupons customersVsCoupons = new CustomersVsCoupons();
         customersVsCoupons.setCoupon(couponService.getById(coupon.getId()));

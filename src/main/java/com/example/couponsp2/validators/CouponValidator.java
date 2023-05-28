@@ -30,6 +30,10 @@ public class CouponValidator {
     public void updateValidator(Coupon coupon) throws CouponException {
         if (!couponRepository.existsCouponByIdAndCompanyId(coupon.getId(), coupon.getCompany().getId()))
             throw new CouponException(ErrorMsg.COUPON_NOT_EXIST);
+
+        if (couponRepository.existsCouponByTitleAndCompanyId(coupon.getTitle(), coupon.getCompany().getId())) {
+            throw new CouponException(ErrorMsg.COUPON_WITH_THIS_TITLE_ALREADY_EXISTS);
+        }
     }
 
     public void isExistValidator(int couponId) throws CouponException {
