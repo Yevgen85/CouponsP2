@@ -10,13 +10,11 @@ import com.example.couponsp2.dto.LoginRequestDTO;
 import com.example.couponsp2.dto.TokenResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @Service
@@ -36,14 +34,13 @@ public class AuthService {
             UserDetails userDetails = this.userService.loadUserByUsername(loginRequestDTO.getUsername());
             Map<String, Object> claims = null;
             try {
-            switch (loginRequestDTO.getClientType()) {
+                switch (loginRequestDTO.getClientType()) {
 
                     case ADMINISTRATOR -> claims = this.adminService.buildClaims((User) userDetails);
                     case COMPANY -> claims = this.companyService.buildClaims((Company) userDetails);
                     case CUSTOMER -> claims = this.customerService.buildClaims((Customer) userDetails);
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 throw new AuthorizationException(ErrorMsg.BAD_CREDENTIALS);
             }
             claims.put("clientType", loginRequestDTO.getClientType());
@@ -62,8 +59,7 @@ public class AuthService {
                             loginRequestDTO.getPassword()
                     )
             );
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             return false;
         }
