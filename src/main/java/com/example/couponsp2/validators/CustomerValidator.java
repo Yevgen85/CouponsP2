@@ -36,6 +36,9 @@ public class CustomerValidator {
         if (customer.getId() != customerId) {
             throw new CustomerException(ErrorMsg.ID_ERROR);
         }
+        if (customerRepository.existsByEmailAndIdIsNot(customer.getEmail(), customerId)) {
+            throw new CustomerException(ErrorMsg.CUSTOMER_EMAIL_EXISTS);
+        }
     }
 
         public void isExistValidator(int customerId) throws CustomerException {

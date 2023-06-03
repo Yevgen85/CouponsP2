@@ -16,6 +16,7 @@ public interface CouponRepository extends JpaRepository<Coupon, Integer> {
 
 
     boolean existsCouponByTitleAndCompanyId(String title, int companyId);
+//    boolean existsCouponByTitle(String title, int companyId);
     boolean existsByTitle(String title);
     boolean existsByCompanyId(int id);
 
@@ -28,6 +29,8 @@ public interface CouponRepository extends JpaRepository<Coupon, Integer> {
     List<Coupon> findByCategory(Category category);
     List<Coupon> findByCompanyIdAndPriceIsLessThanEqual(int companyId, double price);
     List<Coupon> findAllById(int id);
+
+    boolean existsByTitleAndIdIsNot(String title, int id);
 
     Coupon findCouponById(int id);
     List<Coupon> findAllByEndDateBefore(LocalDate localDate);
