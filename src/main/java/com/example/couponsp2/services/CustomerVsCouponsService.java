@@ -47,8 +47,11 @@ public class CustomerVsCouponsService {
         authorizationValidator.validateCustomer(customer);
         couponPurchaseValidator.addValidator(customer, coupon);
 
-        coupon.setAmount(couponService.getById(coupon.getId()).getAmount() - 1);
-        couponRepository.save(coupon);
+
+        Coupon coupon1 = couponRepository.findCouponById(coupon.getId());
+        int amount = coupon1.getAmount();
+        coupon1.setAmount(amount - 1);
+        couponRepository.save(coupon1);
 
         CustomersVsCoupons customersVsCoupons = new CustomersVsCoupons();
         customersVsCoupons.setCoupon(couponService.getById(coupon.getId()));

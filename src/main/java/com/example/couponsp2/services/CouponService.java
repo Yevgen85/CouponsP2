@@ -112,7 +112,7 @@ public class CouponService {
      *This method returns a list of a company coupons by company id
      */
     public List<Coupon> getByCompanyId(int companyId) throws AuthorizationException {
-        authorizationValidator.validateCompany();
+        authorizationValidator.validateCompany(companyId);
         return couponRepository.findAllByCompanyId(companyId);
     }
 
@@ -146,6 +146,9 @@ public class CouponService {
     public Coupon getById(int couponId) throws CouponException, AuthorizationException {
         authorizationValidator.validateCompanyOrCustomer();
         couponValidator.isExistValidator(couponId);
+        if (loggedClientType.getClientType().equals(ClientType.COMPANY)){
+            couponValidator.isBelongToCompanyValidator(couponId, loggedClientType.getId());
+        }
         return couponRepository.findCouponById(couponId);
     }
 

@@ -26,6 +26,11 @@ public class AuthorizationValidator {
             throw new AuthorizationException(ErrorMsg.NOT_AUTHORIZED);
     }
 
+    public void validateCompany(int companyId) throws AuthorizationException {
+        if (!loggedClientType.getClientType().equals(ClientType.COMPANY) && loggedClientType.getId() != companyId)
+            throw new AuthorizationException(ErrorMsg.NOT_AUTHORIZED);
+    }
+
     public void validateCustomer() throws AuthorizationException {
         if (!loggedClientType.getClientType().equals(ClientType.CUSTOMER))
             throw new AuthorizationException(ErrorMsg.NOT_AUTHORIZED);
@@ -41,6 +46,7 @@ public class AuthorizationValidator {
             System.out.println("this one triggered");
             throw new AuthorizationException(ErrorMsg.NOT_AUTHORIZED);
         }
+
     }
 
     public void validateAdminOrCompany() throws AuthorizationException {
